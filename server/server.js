@@ -7,18 +7,16 @@ import teamRoutes from "./routes/teamRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import hackathonRoutes from "./routes/hackathonRoutes.js";
 import { arcjetMiddleware } from "./middlewares/arcjetMiddleware.js";
-import aj from "./config/arcjet.config.js";
-import { sendMessageToGemini } from "./services/geminiChat.js";
+import { sendMessageToGemini, clearConversationHistory } from "./services/geminiChat.js";
 
 const app = express();
 
-// Connect to MongoDB but don't wait for it
+// Connect to MongoDB
 connectToDB();
 
-// Middlewares
-// In development, allow all origins for easier testing
+// CORS middleware (allow all for development)
 app.use(cors({
-  origin: true, // Allow all origins
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
@@ -26,89 +24,96 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// APPLICATION ROUTES
+// ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/hackathons", hackathonRoutes);
 
+// Home route with arcjet middleware
 app.get("/", arcjetMiddleware, (req, res) => {
   res.send("Hello World!");
 });
 
-// Handle preflight OPTIONS requests for CORS
+// Handle preflight
 app.options("/api/chat", cors());
 
 // AI Chat endpoint - support both with and without /api prefix for compatibility
 app.post(["/api/chat", "/chat"], async (req, res) => {
-  console.log('Received chat request:', req.body);
-  
-  const { message, sessionId = 'default' } = req.body;
-  if (!message) {
-    console.log('Error: Message is required');
-    return res.status(400).json({ error: "Message is required" });
-  }
-  
   try {
-    console.log(`Sending message to chatbot for session ${sessionId}:`, message);
-    const aiResponse = await sendMessageToGemini(message, sessionId);
-    console.log('Received response from chatbot');
-    res.json({ response: aiResponse });
-  } catch (err) {
-    console.error('Error in chat endpoint:', err);
-    res.status(500).json({ error: err.message || "Failed to get response from chatbot" });
+    const { message, sessionId = 'default' } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({
+        error: 'No message provided'
+      });
+    }
+    
+    console.log(`Received chat request: ${message}`);
+    
+    // Get response from Gemini (will handle errors internally)
+    const response = await sendMessageToGemini(message, sessionId);
+    
+    console.log(`Sending response: ${response.substring(0, 50)}...`);
+    
+    // Always return a 200 response with the AI's response
+    // The geminiChat service now handles errors gracefully
+    return res.json({ response });
+  } catch (error) {
+    // This is a fallback in case of unexpected errors
+    console.error('Error in chat endpoint:', error);
+    return res.status(200).json({
+      response: "I'm sorry, I encountered an unexpected error. Please try again with a different question."
+    });
   }
 });
 
-// Add a chat history clearing endpoint
-app.post(["/api/chat/clear", "/chat/clear"], async (req, res) => {
+// Chat history clear endpoint
+app.post(['/api/chat/clear', '/chat/clear'], async (req, res) => {
   const { sessionId = 'default' } = req.body;
   try {
-    const { clearConversationHistory } = await import('./services/geminiChat.js');
     clearConversationHistory(sessionId);
-    console.log(`Cleared conversation history for session ${sessionId}`);
-    res.json({ success: true, message: `Chat history cleared for session ${sessionId}` });
-  } catch (err) {
-    console.error('Error clearing chat history:', err);
-    res.status(500).json({ error: err.message || "Failed to clear chat history" });
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error clearing chat history:', error);
+    res.status(500).json({ error: 'Failed to clear chat history' });
   }
 });
 
-// Add a test endpoint to verify the server is running - support both with and without /api prefix
+// Health check endpoint
 app.get(["/api/test", "/test"], (req, res) => {
   res.json({ status: "ok", message: "Server is running properly" });
 });
 
-// Define an array of ports to try in order
-const PORTS = [8080, 5006, 3001, 4000, 5000];
+// PORT fallbacks
+const PORTS = 8080;
 
-// Function to try starting server on different ports
 const startServer = (portIndex = 0) => {
   if (portIndex >= PORTS.length) {
-    console.error('All ports are in use. Could not start server.');
+    console.error("All ports are in use.");
     process.exit(1);
     return;
   }
-  
+
   const PORT = PORTS[portIndex];
-  
+
   app.listen(PORT)
     .on('error', (err) => {
       if (err.code === 'EADDRINUSE') {
-        console.log(`Port ${PORT} is already in use. Trying next port...`);
+        console.log(`Port ${PORT} in use. Trying next...`);
         startServer(portIndex + 1);
       } else {
-        console.error('Server error:', err);
+        console.error("Server error:", err);
         process.exit(1);
       }
     })
     .on('listening', () => {
-      console.log(`Server is running on port ${PORT} in ${config.nodeEnv} mode`);
-      console.log('API endpoints available at:');
-      console.log('- GET  /                 - Hello World');
-      console.log('- POST /api/chat         - AI Chat endpoint');
+      console.log(`✅ Server is running on port ${PORT} in ${config.nodeEnv} mode`);
+      console.log("🌐 Endpoints:");
+      console.log("  - GET  /              ➜ Hello World");
+      console.log("  - POST /api/chat      ➜ AI Chat");
+      console.log("  - POST /api/chat/clear➜ Clear Chat History");
     });
 };
 
-// Start the server
 startServer();

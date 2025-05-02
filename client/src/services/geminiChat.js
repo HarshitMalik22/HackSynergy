@@ -42,30 +42,47 @@ export async function sendMessageToGemini(message, sessionId = 'default') {
   } catch (error) {
     console.error('Error in client-side sendMessageToGemini:', error);
     
-    // Try direct server connection as fallback
+    // Try direct server connection as fallback with multiple ports
     try {
-      const directUrl = 'http://localhost:5005/api/chat';
+      // Try multiple ports, prioritizing the port we know the server is using (5006)
+      const ports =  [8080];
+      let directResponse = null;
       
-      const directResponse = await fetch(directUrl, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({ 
-          message,
-          sessionId
-        })
-      });
-      
-      if (!directResponse.ok) {
-        throw new Error(`Direct server responded with status: ${directResponse.status}`);
+      // Try each port until one works
+      for (const port of ports) {
+        try {
+          console.log(`Trying direct connection to port ${port}...`);
+          const response = await fetch(`http://localhost:${port}/api/chat`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({ 
+              message,
+              sessionId
+            })
+          });
+          
+          if (response.ok) {
+            directResponse = response;
+            console.log(`Connected successfully on port ${port}`);
+            break;
+          }
+        } catch (err) {
+          console.log(`Failed to connect on port ${port}: ${err.message}`);
+        }
       }
       
+      if (!directResponse) {
+        throw new Error('Failed to connect to any server port');
+      }
+      
+      // Parse the response from the successful port
       const directData = await directResponse.json();
       
       if (!directData || !directData.response) {
-        throw new Error('Invalid response format from direct server');
+        throw new Error('Invalid response format from server');
       }
       
       return directData.response;
