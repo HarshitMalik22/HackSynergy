@@ -20,8 +20,6 @@ const teamSchema = new mongoose.Schema(
       default: 0,
     },
 
-   
-
     members:
     
     [{

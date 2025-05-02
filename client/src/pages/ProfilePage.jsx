@@ -26,12 +26,11 @@ const initialUserData = {
     soft: ['Team Leadership', 'Project Management', 'Communication', 'Problem Solving'],
     tools: ['VS Code', 'Git', 'Jira', 'Figma', 'Postman']
   },
-  specializations: [
+  domain: [
     { name: 'Web Development', icon: '💻' },
     { name: 'Cloud Architecture', icon: '☁️' },
     { name: 'DevOps', icon: '🔄' }
   ],
-  practiceAreas: ['Frontend', 'Backend', 'Cloud Infrastructure'],
   experience: [
     {
       company: 'Tech Solutions Inc.',
@@ -277,9 +276,9 @@ export default function ProfilePage() {
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold mb-4" style={{ color: SQUID_WHITE }}>Specializations</h3>
+              <h3 className="text-xl font-semibold mb-4" style={{ color: SQUID_WHITE }}>Domain</h3>
               <div className="flex flex-wrap gap-4">
-                {userData.specializations.map((spec, index) => (
+                {userData.domain.map((spec, index) => (
                   <div
                     key={spec.name}
                     className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/60 border-2"
@@ -291,20 +290,6 @@ export default function ProfilePage() {
                     <span>{spec.icon}</span>
                     <span className="text-white">{spec.name}</span>
                   </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold mb-4" style={{ color: SQUID_WHITE }}>Practice Areas</h3>
-              <div className="flex flex-wrap gap-3">
-                {userData.practiceAreas.map((area, index) => (
-                  <span
-                    key={area}
-                    className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300"
-                  >
-                    {area}
-                  </span>
                 ))}
               </div>
             </section>

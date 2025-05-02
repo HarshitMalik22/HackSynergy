@@ -18,6 +18,42 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+
+    phoneNo: {
+      type: String,
+    },
+
+    about:{
+      type:String,
+    },
+
+    languages:{
+      type:[String],
+      enum:["English","Spanish","German","French","Japanese"],
+    },
+
+    technicalSkills:{
+      type:[String],
+
+    },
+
+    tools:{
+      type:[String]
+    },
+
+    domain:{
+      type:[String]
+    },
+
+    githubLink:{
+      type:String,
+    },
+
+    linkedinLink:{
+      type:String,
+    }
+
+
   },
   { timestamps: true }
 );

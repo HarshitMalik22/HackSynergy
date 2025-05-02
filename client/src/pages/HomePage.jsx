@@ -101,10 +101,9 @@ export default function HomePage() {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
-      console.log("RESPONSE = ", response);
-      if(response.data.success){
+      if(response.status===200){
         localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/");
       }
 
     }catch(err){

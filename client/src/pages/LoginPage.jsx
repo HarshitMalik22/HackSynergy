@@ -28,7 +28,6 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Implement actual login logic with backend
       const response = await axios.post(
         "http://localhost:8080/api/auth/login",
         {
@@ -36,15 +35,17 @@ const LoginPage = () => {
           password: formData.password,
         }
       );
-
-      if (response.status === 200) {
+      
+      if (response.data.success) {
         const token = response.data.token;
         localStorage.setItem("token", token);
-        console.log("token = ", token);
+        navigate("/home");
+      } else {
+        setError(response.data.message || "Login failed");
       }
-      navigate("/");
     } catch (err) {
-      setError(err.message || "An error occurred during login");
+      console.error(err);
+      setError(err.response?.data?.message || "An error occurred during login");
     } finally {
       setIsLoading(false);
     }

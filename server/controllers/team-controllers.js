@@ -137,22 +137,43 @@ export const joinTeamController = async(req,res)=>{
 
 // VIEW THE TEAMS THAT THE USER IS PART OF
 export const viewTeamController = async(req,res)=>{
+  try {
+    if(!req.headers || !req.headers.authorization){
+      return res.status(401).json({message:"Unauthorized"});
+    }
 
-  try{
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.id;
 
-      if(!req.headers || !req.headers.authorization){
-        return res.status(400).json({message:"Unauthorized"});
-      }
+    // Find teams where user is either leader or member
+    const teams = await Team.find({
+      $or: [
+        { leader: userId },
+        { members: userId }
+      ]
+    })
+    .select('-__v');
 
-      const token = req.headers.authorization.split(" ")[1];
-      const decodedToken = jwt.verify(token,process.env.JWT_SECRET);
+    if(!teams || teams.length === 0){
+      return res.status(404).json({
+        message: "No teams found for this user",
+        success: false
+      });
+    }
 
-      const userID = decodedToken.id;
+    return res.status(200).json({
+      message: "Teams retrieved successfully",
+      success: true,
+      data: teams
+    });
 
-      const userTeams = await Teams.find({members:userID});
-      console.log(userTeams);
-  }catch(err){  
-    console.error(err);
-    return res.status(500).json({message:"Internal Server Error"});
+  } catch(err) {
+    console.error("Error in viewTeamController:", err);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+      error: err.message
+    });
   }
 }

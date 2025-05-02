@@ -28,12 +28,13 @@ function App() {
       <Router>
         <Routes>
           {/* Public routes */}
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/joined-teams" element={<JoinedTeams />} />
 
           {/* Protected routes - wrapped with DashboardLayout */}
-          <Route path="/" element={<AuthenticatedRoute><HomePage /></AuthenticatedRoute>} />
+          <Route path = "/home" element = {<HomePage/>}/>
+          {/*<Route path="/home" element={<AuthenticatedRoute><HomePage /></AuthenticatedRoute>} />*/}
           <Route path="/teams" element={<AuthenticatedRoute><TeamPage /></AuthenticatedRoute>} />
           <Route path="/project-board" element={<AuthenticatedRoute><ProjectBoard /></AuthenticatedRoute>} />
           <Route path="/find-teammates" element={<AuthenticatedRoute><TeammateMatching /></AuthenticatedRoute>} />

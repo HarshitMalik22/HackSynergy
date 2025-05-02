@@ -10,6 +10,7 @@ const SignupPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    phoneNo:"",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,23 +37,23 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/signup",
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      const response = await axios.post("http://localhost:8080/api/auth/signup", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phoneNo: formData.phoneNo
+      });
 
-      if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        console.log("Token set in localStorage");
+      if (response.data.success) {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        navigate("/home");
+      } else {
+        setError(response.data.message || "Signup failed");
       }
-
-      navigate("/");
     } catch (err) {
-      setError(err.message || "An error occurred during signup");
+      console.error(err);
+      setError(err.response?.data?.message || "An error occurred during signup");
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +135,23 @@ const SignupPage = () => {
               placeholder="Enter your email"
             />
           </motion.div>
+          <motion.div
+            className="form-group"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            <label htmlFor="phoneNo">Phone Number</label>
+            <input
+              type="tel"
+              id="phoneNo"
+              name="phoneNo"
+              value={formData.phoneNo}
+              onChange={handleChange}
+              required
+              placeholder="Enter your phone number"
+            />
+          </motion.div>
 
           <motion.div
             className="form-group"
@@ -180,6 +198,7 @@ const SignupPage = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 1, duration: 0.5 }}
+            
           >
             {isLoading ? "Creating account..." : "Sign Up"}
           </motion.button>

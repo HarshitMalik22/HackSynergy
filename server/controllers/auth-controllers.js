@@ -12,7 +12,7 @@ export const signUpController = async (req, res) => {
       .json({ message: "Validation Error", errors: errors.array() });
   }
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phoneNo} = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -32,6 +32,8 @@ export const signUpController = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      phoneNo
+      
     };
 
     const user = await User.create(newUser);
@@ -104,25 +106,20 @@ export const logoutController = async (req, res) => {
   try {
     const token = req.headers["authorization"]?.split(" ")[1];
 
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-  
-
-    if (!decodedToken) {
-      return res.status(400).json({ message: "Couldn't verify the token" });
+    if (!token) {
+      return res.status(400).json({ message: "No token provided" });
     }
 
-    const userID = decodedToken.id;
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decodedToken) {
+      return res.status(400).json({ message: "Invalid token" });
+    }
 
     const blacklistedToken = await Blacklist.create({ token });
 
     if (!blacklistedToken) {
-      return res.status(400).json({ message: "Error in Logout" });
-    }
-
-    const deleted = await User.findByIdAndDelete(userID);
-
-    if(!deleted){
-      return res.status(400).json({message:"User not found or already deleted"});
+      return res.status(400).json({ message: "Error in logging out" });
     }
 
     return res

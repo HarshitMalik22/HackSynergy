@@ -12,7 +12,7 @@ const Chatbot = () => {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  const BASE_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:8080';
+  const BASE_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:8081';
 
   useEffect(() => {
     if (open && chatEndRef.current) {

@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import connectToDB from "./db/db.js";
+import dotenv from "dotenv";
+dotenv.config();
 import { config } from "./db/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
@@ -35,6 +37,8 @@ app.get("/", arcjetMiddleware, (req, res) => {
   res.send("Hello World!");
 });
 
+
+/*
 // Handle preflight
 app.options("/api/chat", cors());
 
@@ -85,35 +89,24 @@ app.get(["/api/test", "/test"], (req, res) => {
   res.json({ status: "ok", message: "Server is running properly" });
 });
 
-// PORT fallbacks
-const PORTS = 8080;
+const PORT = 8080;
 
-const startServer = (portIndex = 0) => {
-  if (portIndex >= PORTS.length) {
-    console.error("All ports are in use.");
+app.listen(process.env.PORT || 3000)
+  .on('error', (err) => {
+    console.error("Server error:", err);
     process.exit(1);
-    return;
-  }
+  })
+  .on('listening', () => {
+    console.log(`✅ Server is running on port ${PORT} in ${config.nodeEnv} mode`);
+    console.log("🌐 Endpoints:");
+    console.log("  - GET  /              ➜ Hello World");
+    console.log("  - POST /api/chat      ➜ AI Chat");
+    console.log("  - POST /api/chat/clear➜ Clear Chat History");
+  });
 
-  const PORT = PORTS[portIndex];
+*/
 
-  app.listen(PORT)
-    .on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.log(`Port ${PORT} in use. Trying next...`);
-        startServer(portIndex + 1);
-      } else {
-        console.error("Server error:", err);
-        process.exit(1);
-      }
-    })
-    .on('listening', () => {
-      console.log(`✅ Server is running on port ${PORT} in ${config.nodeEnv} mode`);
-      console.log("🌐 Endpoints:");
-      console.log("  - GET  /              ➜ Hello World");
-      console.log("  - POST /api/chat      ➜ AI Chat");
-      console.log("  - POST /api/chat/clear➜ Clear Chat History");
-    });
-};
 
-startServer();
+app.listen(process.env.PORT, ()=>{
+  console.log("Server is listening on ", process.env.PORT);
+});
