@@ -15,7 +15,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5005', // Updated to new server port
+        target: 'http://localhost:5006', // Updated to match current server port
         changeOrigin: true,
         secure: false,
         // Don't rewrite the path - keep the /api prefix

@@ -1,22 +1,28 @@
-export async function sendMessageToGemini(message, sessionId = 'default') {
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message, sessionId }),
-    });
+// routes/chat.js
+import express from 'express';
+import { sendMessageToGemini, clearConversationHistory } from '../services/geminiClient.js';
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to get response from server');
-    }
+const router = express.Router();
 
-    const data = await response.json();
-    return data.response;
-  } catch (error) {
-    console.error('Error sending message to Gemini:', error);
-    throw error;
+router.post('/chat', async (req, res) => {
+  const { message, sessionId = 'default' } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required.' });
   }
-}
+
+  try {
+    const reply = await sendMessageToGemini(message, sessionId);
+    res.json({ response: reply });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/chat/clear', (req, res) => {
+  const { sessionId = 'default' } = req.body;
+  clearConversationHistory(sessionId);
+  res.json({ message: 'Session cleared' });
+});
+
+export default router;
