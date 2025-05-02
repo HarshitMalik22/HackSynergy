@@ -9,7 +9,7 @@ const TeamsPage = () => {
   const [sortBy, setSortBy] = useState('recent');
   const [filterBy, setFilterBy] = useState('all');
 
-  /*
+ 
   const [teams, setTeams] = useState([
     {
       id: 1,
@@ -43,8 +43,9 @@ const TeamsPage = () => {
     }
   ]);
 
-  */
  
+ 
+  /*
   const [teams,setTeams] = useState([]);
 
   useEffect(()=>{
@@ -65,6 +66,8 @@ const TeamsPage = () => {
       return;
     }
   },[])
+
+  */
   const handleCreateTeam = (e) => {
     e.preventDefault();
     const newTeam = {

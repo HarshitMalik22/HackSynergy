@@ -1,67 +1,70 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
-import '../styles/LoginPage.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
+import "../styles/LoginPage.css";
 import axios from "axios";
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { theme } = useTheme();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
       // TODO: Implement actual login logic with backend
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
-        email: formData.email,
-        password: formData.password
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
 
-      if(response.data.status===200){
+      if (response.status === 200) {
         const token = response.data.token;
-        localStorage.setItem("token",token);
+        localStorage.setItem("token", token);
         console.log("token = ", token);
       }
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      setError(err.message || 'An error occurred during login');
+      setError(err.message || "An error occurred during login");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="auth-container"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.div 
+      <motion.div
         className="auth-card"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
         <div className="auth-header">
-          <motion.h1 
+          <motion.h1
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -78,7 +81,7 @@ const LoginPage = () => {
         </div>
 
         {error && (
-          <motion.div 
+          <motion.div
             className="error-message"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -88,7 +91,7 @@ const LoginPage = () => {
         )}
 
         <form className="auth-form" onSubmit={handleSubmit}>
-          <motion.div 
+          <motion.div
             className="form-group"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -106,7 +109,7 @@ const LoginPage = () => {
             />
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="form-group"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -124,7 +127,7 @@ const LoginPage = () => {
             />
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="form-options"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -149,11 +152,11 @@ const LoginPage = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.9, duration: 0.5 }}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? "Signing in..." : "Sign In"}
           </motion.button>
         </form>
 
-        <motion.div 
+        <motion.div
           className="auth-divider"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -162,13 +165,13 @@ const LoginPage = () => {
           <span>OR</span>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="social-login"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1.1, duration: 0.5 }}
         >
-          <motion.button 
+          <motion.button
             className="btn-social"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -176,7 +179,7 @@ const LoginPage = () => {
             <img src="/google-icon.svg" alt="Google" />
             Continue with Google
           </motion.button>
-          <motion.button 
+          <motion.button
             className="btn-social"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -186,7 +189,7 @@ const LoginPage = () => {
           </motion.button>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="auth-footer"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -199,4 +202,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;

@@ -37,6 +37,7 @@ export const sendMessageToGemini = async (message, sessionId = 'default') => {
       console.log('No API key found - using development fallback response');
       return getDevFallbackResponse(message);
     }
+<<<<<<< HEAD
     
     // Try multiple model endpoints to ensure compatibility
     const endpoints = [
@@ -101,6 +102,23 @@ export const sendMessageToGemini = async (message, sessionId = 'default') => {
     // Handle all errors gracefully
     console.error('Error in Gemini chat service:', error);
     return "I'm currently experiencing technical difficulties. The team is working on resolving this. Please try again later.";
+=======
+  };
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await response.json();
+
+  const reply = data?.candidates?.[0]?.content;
+
+  if (!reply) {
+    console.error('Invalid response from PaLM:', reply);
+    throw new Error('Failed to get valid response from chat-bison-001');
+>>>>>>> 8c5e053938f856b67ab83ad21623e9f9b197d387
   }
 };
 
