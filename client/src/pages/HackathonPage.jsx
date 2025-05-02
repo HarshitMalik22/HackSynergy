@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import '../styles/Events.css';
+import DashboardLayout from '../Components/DashBoardLayout';
+
 
 // Use a consistent API URL that matches the server port
 const API_URL = 'http://localhost:8080/api';
@@ -152,6 +154,7 @@ const HackathonPage = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="flex">
         {/* Left Sidebar */}
+        
         <div className="w-64 min-h-screen bg-gray-800 p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold">Filters</h2>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import DashboardLayout from '../Components/DashBoardLayout';
 // Squid Game Colors
 const SQUID_PINK = '#FF357A';
 const SQUID_GREEN = '#00FFB0';
@@ -127,12 +128,15 @@ export default function HomePage() {
       <AnimatedBackground />
       <CustomCursor />
       {/* Sticky Navbar */}
+      
       <motion.nav
         className="fixed top-0 left-0 w-full z-50 backdrop-blur bg-black/80 border-b border-pink-500/30 shadow-glass"
         initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
+
+        
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
           <span className="font-extrabold text-2xl tracking-widest" style={{ color: SQUID_PINK, letterSpacing: '0.15em', fontFamily: 'Montserrat, sans-serif', textShadow: `0 0 8px ${SQUID_PINK}33` }}>H△CKSYNERGY</span>
           <div className="relative" ref={profileRef}>

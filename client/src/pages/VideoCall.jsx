@@ -68,7 +68,7 @@ const VideoCall = () => {
       localVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
     }
     // Navigate back to chat or home
-    window.location.href = '/chat';
+    window.location.href = '/home';
   };
 
   return (
