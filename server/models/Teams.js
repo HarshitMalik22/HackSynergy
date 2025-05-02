@@ -3,6 +3,12 @@ import mongoose from "mongoose";
 const teamSchema = new mongoose.Schema(
   {
 
+    leader:{
+      type:String,
+      ref:"User",
+      required:true
+    },
+
     teamName: {
       type: String,
       required: true,
@@ -13,6 +19,8 @@ const teamSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+   
 
     members:
     

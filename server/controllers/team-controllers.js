@@ -4,6 +4,8 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import Teams from "../models/Teams.js";
 
+
+// CREATE A NEW TEAM
 export const createTeamController = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -15,18 +17,30 @@ export const createTeamController = async (req, res) => {
       return res.status(401).json({message:"Unauthorized"});
     }
     const token = req.headers.authorization.split(" ")[1];
-    const id = jwt.verify(token,process.env.JWT_SECRET);
+    const decodedToken =  jwt.verify(token,process.env.JWT_SECRET);
 
     
-    const { teamName, techStack, description } = req.body;
+    const { leader,teamName, techStack, description, member1,member2 } = req.body;
     
-    const user = await User.findById(id.id);
+    
+    const user = await User.findOne({email:leader});
 
     if(!user){
       return res.status(404).json({message:"User not found"});
     }
 
-    const memberID = id.id;
+    const teammate1 = await User.findOne({email:member1});
+    if(!teammate1){
+      return res.status(404).json({message:"Teammate 1 doesn't have account"});
+    }
+
+    const teammate2 = await User.findOne({email:member2});
+
+    if(!teammate2){
+      return req.status(400).json({message:"Teammate 2 doesn't have an account"});
+    }
+
+   const memberID = decodedToken.id;
 
     const existingTeam = await Team.findOne({ teamName });
 
@@ -38,8 +52,12 @@ export const createTeamController = async (req, res) => {
       teamName,
       description,
       techStack,
-      members: [memberID],  
+      leader:user
     });
+
+    const membersArray = [teammate1,teammate2];
+    newTeam.members = membersArray;
+    newTeam.memberCount=membersArray.length;
 
     await newTeam.save();
 
@@ -54,56 +72,19 @@ export const createTeamController = async (req, res) => {
   }
 };
 
-export const addTeammate = async(req,res)=>{
+
+// ADD A SINGLE TEAMMATE
+export const addTeammateController = async(req,res)=>{
+
   const errors = validationResult(req);
   if(!errors.isEmpty()){
-    return res.status(400).json({message:"Error in Validation of email"});
+    return res.status(400).json({message:"Validation Error"});
   }
 
   try{
-    if(!req.headers || !req.headers.authorization){
-      return res.status(401).json({message:"Unauthorized"});
-    }
+
     
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const teamLeaderId = decodedToken.id;
-
-    const {email} = req.body;
-
-    // Find the team where the requesting user is the first member (team leader)
-    const team = await Team.findOne({ members: { $elemMatch: { $eq: teamLeaderId } } });
     
-    if(!team){
-      return res.status(404).json({message:"Team not found or you are not the team leader"});
-    }
-
-    // Check if the requesting user is the first member (team leader)
-    if(team.members[0].toString() !== teamLeaderId.toString()){
-      return res.status(403).json({message:"Only team leader can add members"});
-    }
-
-    // Find the user to be added
-    const newMember = await User.findOne({email});
-    if(!newMember){
-      return res.status(404).json({message:"User not found"});
-    }
-
-    // Check if user is already a member
-    if(team.members.includes(newMember._id)){
-      return res.status(400).json({message:"User is already a member of this team"});
-    }
-
-    // Add the new member to the team
-    team.members.push(newMember._id);
-    team.memberCount = team.members.length;
-    await team.save();
-
-    return res.status(200).json({
-      message: "Teammate added successfully",
-      success: true,
-      data: team
-    });
 
   }catch(err){
     console.error(err);
@@ -111,7 +92,7 @@ export const addTeammate = async(req,res)=>{
   }
 }
 
-
+// RETURN ALL TEAMS
 export const getTeamsController = async(req,res)=>{
 
   try{
@@ -154,6 +135,7 @@ export const joinTeamController = async(req,res)=>{
 */
 
 
+// VIEW THE TEAMS THAT THE USER IS PART OF
 export const viewTeamController = async(req,res)=>{
 
   try{

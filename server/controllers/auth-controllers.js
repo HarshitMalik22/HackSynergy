@@ -105,15 +105,24 @@ export const logoutController = async (req, res) => {
     const token = req.headers["authorization"]?.split(" ")[1];
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  
 
     if (!decodedToken) {
       return res.status(400).json({ message: "Couldn't verify the token" });
     }
 
+    const userID = decodedToken.id;
+
     const blacklistedToken = await Blacklist.create({ token });
 
     if (!blacklistedToken) {
       return res.status(400).json({ message: "Error in Logout" });
+    }
+
+    const deleted = await User.findByIdAndDelete(userID);
+
+    if(!deleted){
+      return res.status(400).json({message:"User not found or already deleted"});
     }
 
     return res

@@ -1,6 +1,6 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { addTeammate, createTeamController, getTeamsController, viewTeamController } from "../controllers/team-controllers.js";
+import { addTeammateController, createTeamController, getTeamsController, viewTeamController } from "../controllers/team-controllers.js";
 import { check } from "express-validator";
 const router = express.Router();
 
@@ -27,7 +27,7 @@ router.post(
 router.post("/add-teammate", authMiddleware, [
   check("email").notEmpty().withMessage("Please enter the email of the teammate to add")
 ],
-addTeammate
+addTeammateController
 )
 
 

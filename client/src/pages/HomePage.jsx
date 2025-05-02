@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
 // Squid Game Colors
 const SQUID_PINK = '#FF357A';
 const SQUID_GREEN = '#00FFB0';
@@ -88,8 +88,30 @@ const features = [
 ];
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef();
+
+  const logoutHandler = async ()=>{
+
+    try{
+
+      const response = await axios.post("http://localhost:8080/api/auth/logout", {},{
+        headers:{
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      console.log("RESPONSE = ", response);
+      if(response.data.success){
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+
+    }catch(err){
+      console.error("Error in logout", err);
+      return;
+    }
+  }
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -132,11 +154,7 @@ export default function HomePage() {
             {showProfile && (
               <div className="absolute right-0 mt-2 w-40 bg-black border border-pink-500 rounded-xl shadow-lg z-50">
                 <button
-                  onClick={() => {
-                    setShowProfile(false);
-                    // Add your logout logic here
-                    alert('Logged out!');
-                  }}
+                  onClick={logoutHandler}
                   className="block w-full text-left px-4 py-2 text-white hover:bg-pink-600 rounded-xl"
                 >
                   Logout
