@@ -152,3 +152,25 @@ export const joinTeamController = async(req,res)=>{
 }
 
 */
+
+
+export const viewTeamController = async(req,res)=>{
+
+  try{
+
+      if(!req.headers || !req.headers.authorization){
+        return res.status(400).json({message:"Unauthorized"});
+      }
+
+      const token = req.headers.authorization.split(" ")[1];
+      const decodedToken = jwt.verify(token,process.env.JWT_SECRET);
+
+      const userID = decodedToken.id;
+
+      const userTeams = await Teams.find({members:userID});
+      console.log(userTeams);
+  }catch(err){  
+    console.error(err);
+    return res.status(500).json({message:"Internal Server Error"});
+  }
+}

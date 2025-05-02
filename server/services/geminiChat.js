@@ -35,7 +35,7 @@ export const sendMessageToGemini = async (message, sessionId = 'default') => {
   const reply = data?.candidates?.[0]?.content;
 
   if (!reply) {
-    console.error('Invalid response from PaLM:', data);
+    console.error('Invalid response from PaLM:', reply);
     throw new Error('Failed to get valid response from chat-bison-001');
   }
 

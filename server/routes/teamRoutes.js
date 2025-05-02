@@ -1,13 +1,14 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { addTeammate, createTeamController, getTeamsController } from "../controllers/team-controllers.js";
+import { addTeammate, createTeamController, getTeamsController, viewTeamController } from "../controllers/team-controllers.js";
 import { check } from "express-validator";
 const router = express.Router();
 
 // Get All Teams
 router.get("/get-teams", authMiddleware,getTeamsController )
 
-
+// Get the teams joined by the particular user
+router.get("/view-team", authMiddleware, viewTeamController);
 // Create a new Team
 router.post(
   "/create-team",
