@@ -1,0 +1,190 @@
+/* Modern UI Components */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-normal);
+  }
+  
+  .glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  /* Custom Cursor */
+  .custom-cursor {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    z-index: 9999;
+    transition: transform 0.2s ease;
+  }
+  
+  /* Magnetic Buttons */
+  .magnetic-button {
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-normal);
+  }
+  
+  .magnetic-button::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-gradient);
+    opacity: 0;
+    transition: var(--transition-normal);
+  }
+  
+  .magnetic-button:hover::before {
+    opacity: 0.1;
+  }
+  
+  /* Oversized Typography */
+  .hero-heading {
+    font-size: 5rem;
+    line-height: 1.1;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+  }
+  
+  /* Scroll Progress Indicator */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--bg-tertiary);
+    z-index: 1000;
+  }
+  
+  .scroll-progress-bar {
+    height: 100%;
+    background: var(--primary-gradient);
+    width: 0%;
+    transition: width 0.1s ease;
+  }
+  
+  /* Parallax Container */
+  .parallax-container {
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+  }
+  
+  .parallax-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+  }
+  
+  /* Horizontal Scroll Section */
+  .horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding: 2rem 0;
+  }
+  
+  .horizontal-scroll-item {
+    flex: 0 0 auto;
+    width: 80vw;
+    scroll-snap-align: start;
+    margin-right: 2rem;
+  }
+  
+  /* Floating Action Button */
+  .floating-action-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-normal);
+    z-index: 100;
+  }
+  
+  .floating-action-button:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  /* Animated SVG Icons */
+  .animated-icon {
+    transition: var(--transition-normal);
+  }
+  
+  .animated-icon:hover {
+    transform: scale(1.2) rotate(10deg);
+  }
+  
+  /* Form Animations */
+  .form-group {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 1rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+  }
+  
+  /* Loading Animation */
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--bg-tertiary);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-heading {
+      font-size: 3rem;
+    }
+    
+    .horizontal-scroll-item {
+      width: 90vw;
+    }
+    
+    .floating-action-button {
+      width: 50px;
+      height: 50px;
+    }
+  } 

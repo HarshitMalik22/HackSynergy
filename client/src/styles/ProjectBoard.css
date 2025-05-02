@@ -1,0 +1,330 @@
+.project-board {
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+  
+  /* Board Header */
+  .board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .board-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+  
+  .create-task-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .create-task-btn:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  /* Board Columns */
+  .board-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .column {
+    background-color: var(--column-bg);
+    border-radius: 12px;
+    padding: 1rem;
+    min-height: 500px;
+  }
+  
+  .column.dragging-over {
+    background-color: var(--column-drag-bg);
+  }
+  
+  .column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .column-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .task-count {
+    background-color: var(--count-bg);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+  }
+  
+  /* Tasks */
+  .tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100px;
+  }
+  
+  .task {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .task.dragging {
+    background-color: var(--card-drag-bg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .priority-tag {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .priority-tag.high {
+    background-color: #fee2e2;
+    color: #dc2626;
+  }
+  
+  .priority-tag.medium {
+    background-color: #fef3c7;
+    color: #d97706;
+  }
+  
+  .priority-tag.low {
+    background-color: #dcfce7;
+    color: #16a34a;
+  }
+  
+  .task h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .task-description {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  .task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+  
+  /* Task Modal */
+  .task-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+  }
+  
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .cancel-btn,
+  .create-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .cancel-btn {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+  
+  .create-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+  }
+  
+  .cancel-btn:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .create-btn:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  /* Theme Variables */
+  .project-board.light {
+    --bg-color: #f9fafb;
+    --text-color: #1f2937;
+    --text-secondary: #6b7280;
+    --card-bg: #ffffff;
+    --column-bg: #f3f4f6;
+    --column-drag-bg: #e5e7eb;
+    --card-drag-bg: #f3f4f6;
+    --input-bg: #ffffff;
+    --button-bg: #f3f4f6;
+    --button-hover: #e5e7eb;
+    --border-color: #e5e7eb;
+    --count-bg: #e5e7eb;
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+  }
+  
+  .project-board.dark {
+    --bg-color: #111827;
+    --text-color: #f9fafb;
+    --text-secondary: #9ca3af;
+    --card-bg: #1f2937;
+    --column-bg: #1f2937;
+    --column-drag-bg: #374151;
+    --card-drag-bg: #374151;
+    --input-bg: #1f2937;
+    --button-bg: #374151;
+    --button-hover: #4b5563;
+    --border-color: #374151;
+    --count-bg: #374151;
+    --primary-color: #818cf8;
+    --primary-hover: #6366f1;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .project-board {
+      padding: 1rem;
+    }
+  
+    .board-columns {
+      grid-template-columns: 1fr;
+    }
+  
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  
+    .modal-content {
+      margin: 1rem;
+      max-height: calc(100vh - 2rem);
+    }
+  } 

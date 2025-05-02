@@ -1,0 +1,139 @@
+/* HackSynergy/client/src/styles/JoinedTeams.css */
+
+.teams-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #18181B 0%, #23234b 100%);
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+  padding: 40px 0 60px 0;
+}
+
+.teams-header {
+  max-width: 900px;
+  margin: 0 auto 32px auto;
+  text-align: center;
+}
+
+.teams-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #FF357A;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 8px #FF357A33;
+}
+
+.teams-header p {
+  color: #bdbdbd;
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 36px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.team-card {
+  background: rgba(24, 24, 27, 0.85);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 #FF357A33;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 340px;
+  position: relative;
+  border: 2px solid #FF357A44;
+  transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s;
+}
+
+.team-card:hover {
+  box-shadow: 0 8px 32px 0 #00FFB033;
+  border-color: #00FFB0;
+  transform: translateY(-4px) scale(1.015);
+}
+
+.team-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin-bottom: 16px;
+  border: 2px solid #FF357A33;
+  box-shadow: 0 2px 12px 0 #FF357A22;
+}
+
+.team-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FF357A;
+  margin-bottom: 0.25rem;
+}
+
+.team-info p {
+  color: #bdbdbd;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.team-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.skill-tag {
+  background: #00FFB022;
+  color: #00FFB0;
+  border: 1.5px solid #00FFB044;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+  transition: background 0.18s, color 0.18s;
+}
+
+.team-stats {
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 0.5rem;
+}
+
+.status-active {
+  color: #00FFB0;
+  font-weight: 700;
+}
+
+.status-completed {
+  color: #FF357A;
+  font-weight: 700;
+}
+
+.status-recruiting {
+  color: #FFD600;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .teams-header {
+    max-width: 100%;
+    padding: 0 12px;
+  }
+  .teams-grid {
+    max-width: 100%;
+    padding: 0 8px;
+    gap: 18px;
+  }
+  .team-card {
+    padding: 18px 10px;
+  }
+}

@@ -1,0 +1,371 @@
+.teams-page {
+    padding: 2rem;
+    min-height: 100%;
+    background-color: var(--background-default);
+    color: var(--text-primary);
+  }
+  
+  .teams-header {
+    margin-bottom: 2rem;
+  }
+  
+  .teams-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .teams-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+  
+  .teams-controls {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .search-filter {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .search-input {
+    min-width: 240px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: var(--background-paper);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color-light);
+  }
+  
+  .filter-select,
+  .sort-select {
+    padding: 0.75rem 2rem 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: var(--background-paper);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+  }
+  
+  .teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .team-card {
+    background-color: var(--background-paper);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border-color);
+  }
+  
+  .team-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .team-card.create-team {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    cursor: pointer;
+    background-color: var(--background-paper);
+    border: 2px dashed var(--border-color);
+  }
+  
+  .team-card.create-team:hover {
+    border-color: var(--primary-color);
+    background-color: var(--background-hover);
+  }
+  
+  .team-card-content {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .plus-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .team-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+  
+  .team-info {
+    padding: 1.5rem;
+  }
+  
+  .team-info h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  
+  .team-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+  
+  .team-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .skill-tag {
+    padding: 0.25rem 0.75rem;
+    background-color: var(--background-hover);
+    color: var(--text-secondary);
+    border-radius: 1rem;
+    font-size: 0.75rem;
+  }
+  
+  .team-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+  
+  .status-active {
+    color: var(--success-color);
+  }
+  
+  .status-recruiting {
+    color: var(--warning-color);
+  }
+  
+  .status-completed {
+    color: var(--text-secondary);
+  }
+  
+  .join-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .join-button:hover {
+    background-color: var(--primary-color-dark);
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .create-team-modal {
+    background-color: var(--background-paper);
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: var(--background-default);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color-light);
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .cancel-button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--background-hover);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .create-button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .create-button:hover {
+    background-color: var(--primary-color-dark);
+  }
+  
+  @media (max-width: 768px) {
+    .teams-page {
+      padding: 1rem;
+    }
+  
+    .teams-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .search-filter {
+      flex-direction: column;
+    }
+  
+    .search-input,
+    .filter-select,
+    .sort-select {
+      width: 100%;
+    }
+  
+    .teams-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Theme Variables */
+  .teams-page.light {
+    --bg-color: #f9fafb;
+    --text-color: #1f2937;
+    --text-secondary: #6b7280;
+    --card-bg: #ffffff;
+    --input-bg: #ffffff;
+    --button-bg: #f3f4f6;
+    --button-hover: #e5e7eb;
+    --border-color: #e5e7eb;
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+  }
+  
+  .teams-page.dark {
+    --bg-color: #111827;
+    --text-color: #f9fafb;
+    --text-secondary: #9ca3af;
+    --card-bg: #1f2937;
+    --input-bg: #1f2937;
+    --button-bg: #374151;
+    --button-hover: #4b5563;
+    --border-color: #374151;
+    --primary-color: #818cf8;
+    --primary-hover: #6366f1;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .teams-page {
+      padding: 1rem;
+    }
+  
+    .teams-header h1 {
+      font-size: 2rem;
+    }
+  
+    .team-images {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .team-image-container {
+      width: 100%;
+      max-width: 400px;
+    }
+  
+    .team-form {
+      flex-direction: column;
+    }
+  
+    .modal {
+      margin: 1rem;
+      max-height: calc(100vh - 2rem);
+    }
+  } 
