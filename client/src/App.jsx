@@ -25,7 +25,7 @@ function App() {
   return (
     <ThemeProvider>
       <Chatbot />
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LoginPage />} />
@@ -33,8 +33,7 @@ function App() {
           <Route path="/joined-teams" element={<JoinedTeams />} />
 
           {/* Protected routes - wrapped with DashboardLayout */}
-          <Route path = "/home" element = {<HomePage/>}/>
-          {/*<Route path="/home" element={<AuthenticatedRoute><HomePage /></AuthenticatedRoute>} />*/}
+          <Route path="/home" element={<HomePage/>}/>
           <Route path="/teams" element={<AuthenticatedRoute><TeamPage /></AuthenticatedRoute>} />
           <Route path="/project-board" element={<AuthenticatedRoute><ProjectBoard /></AuthenticatedRoute>} />
           <Route path="/find-teammates" element={<AuthenticatedRoute><TeammateMatching /></AuthenticatedRoute>} />

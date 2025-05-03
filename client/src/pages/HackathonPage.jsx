@@ -196,9 +196,9 @@ const HackathonPage = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-6">
-            {filteredEvents.map((event) => (
+            {filteredEvents.map((event, index) => (
               <motion.div
-                key={event.id}
+                key={`${event.id}-${index}`}
                 className="bg-gray-800 rounded-lg overflow-hidden relative group"
                 whileHover={{ y: -5 }}
                 initial={{ opacity: 0, y: 20 }}
@@ -206,6 +206,7 @@ const HackathonPage = () => {
                 transition={{ duration: 0.3 }}
               >
                 <button
+                  key={`bookmark-${event.id}`}
                   className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-900 bg-opacity-50 hover:bg-opacity-75"
                   onClick={(e) => {
                     e.preventDefault();
@@ -219,6 +220,7 @@ const HackathonPage = () => {
 
                 <div className="aspect-w-16 aspect-h-9">
                   <img
+                    key={`img-${event.id}`}
                     src={event.image}
                     alt={event.title}
                     className="w-full h-48 object-cover"
@@ -228,7 +230,7 @@ const HackathonPage = () => {
                 <div className="p-6">
                   <h3 className="text-lg font-bold mb-2 line-clamp-2">{event.title}</h3>
                   <div className="text-gray-400 text-sm mb-4">
-                    Devfolio, {event.mode === 'online' ? 'Virtual Event' : event.location}
+                    {event.source || 'Devfolio'}, {event.mode === 'online' ? 'Virtual Event' : event.location}
                   </div>
                   
                   <div className="flex justify-between items-center text-sm text-gray-400 mb-4">
@@ -251,6 +253,7 @@ const HackathonPage = () => {
 
                   <div className="flex space-x-4">
                     <a
+                      key={`learn-more-${event.id}`}
                       href={event.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -262,6 +265,7 @@ const HackathonPage = () => {
                       </svg>
                     </a>
                     <button
+                      key={`create-team-${event.id}`}
                       className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-center text-sm font-medium flex items-center justify-center gap-2"
                       onClick={() => setShowSignIn(true)}
                     >

@@ -37,8 +37,6 @@ app.get("/", arcjetMiddleware, (req, res) => {
   res.send("Hello World!");
 });
 
-
-/*
 // Handle preflight
 app.options("/api/chat", cors());
 
@@ -46,20 +44,20 @@ app.options("/api/chat", cors());
 app.post(["/api/chat", "/chat"], async (req, res) => {
   try {
     const { message, sessionId = 'default' } = req.body;
-    
+
     if (!message) {
       return res.status(400).json({
         error: 'No message provided'
       });
     }
-    
+
     console.log(`Received chat request: ${message}`);
-    
+
     // Get response from Gemini (will handle errors internally)
     const response = await sendMessageToGemini(message, sessionId);
-    
+
     console.log(`Sending response: ${response.substring(0, 50)}...`);
-    
+
     // Always return a 200 response with the AI's response
     // The geminiChat service now handles errors gracefully
     return res.json({ response });
@@ -89,24 +87,13 @@ app.get(["/api/test", "/test"], (req, res) => {
   res.json({ status: "ok", message: "Server is running properly" });
 });
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
-app.listen(process.env.PORT || 3000)
-  .on('error', (err) => {
-    console.error("Server error:", err);
-    process.exit(1);
-  })
-  .on('listening', () => {
-    console.log(`✅ Server is running on port ${PORT} in ${config.nodeEnv} mode`);
-    console.log("🌐 Endpoints:");
-    console.log("  - GET  /              ➜ Hello World");
-    console.log("  - POST /api/chat      ➜ AI Chat");
-    console.log("  - POST /api/chat/clear➜ Clear Chat History");
-  });
-
-*/
-
-
-app.listen(process.env.PORT, ()=>{
-  console.log("Server is listening on ", process.env.PORT);
+app.listen(PORT, () => {
+  console.log(`✅ Server is running on port ${PORT} in ${config.nodeEnv} mode`);
+  console.log("🌐 Endpoints:");
+  console.log("  - GET  /              ➜ Hello World");
+  console.log("  - GET  /api/hackathons➜ Get Hackathons");
+  console.log("  - POST /api/chat      ➜ AI Chat");
+  console.log("  - POST /api/chat/clear➜ Clear Chat History");
 });
