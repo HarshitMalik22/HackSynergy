@@ -11,6 +11,8 @@ const SignupPage = () => {
     password: "",
     confirmPassword: "",
     phoneNo:"",
+    linkedinLink:"",
+    githubLink:""
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +43,9 @@ const SignupPage = () => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        phoneNo: formData.phoneNo
+        phoneNo: formData.phoneNo,
+        githubLink,
+        linkedinLink
       });
 
       if (response.data.success) {
@@ -207,23 +211,45 @@ const SignupPage = () => {
             />
           </motion.div>
 
+         
+
           <motion.div
             className="form-group"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.5 }}
           >
-            <label htmlFor="phoneNo">Phone Number</label>
+            <label htmlFor="githubLink">Github Link</label>
             <input
-              type="tel"
-              id="phoneNo"
-              name="phoneNo"
-              value={formData.phoneNo}
+              type="url"
+              id="githubLink"
+              name="githubLink"
+              value={formData.githubLink}
               onChange={handleChange}
               required
-              placeholder="Enter your phone number"
+              placeholder="Enter your Github profile link"
             />
           </motion.div>
+
+
+          <motion.div
+            className="form-group"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            <label htmlFor="linkedinLink">Linkedin Link</label>
+            <input
+              type="url"
+              id="linkedinLink"
+              name="linkedinLink"
+              value={formData.linkedinLink}
+              onChange={handleChange}
+              required
+              placeholder="Enter your Github profile link"
+            />
+          </motion.div>
+
 
           <motion.button
             type="submit"
