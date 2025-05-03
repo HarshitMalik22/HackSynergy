@@ -127,7 +127,7 @@ export default function HomePage() {
     <div className="font-sans min-h-screen relative overflow-x-hidden" style={{ background: SQUID_BLACK }}>
       <AnimatedBackground />
       <CustomCursor />
-      {/* Sticky Navbar */}
+       {/* Sticky Navbar */}
       
       <motion.nav
         className="fixed top-0 left-0 w-full z-50 backdrop-blur bg-black/80 border-b border-pink-500/30 shadow-glass"

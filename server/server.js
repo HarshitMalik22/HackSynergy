@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROUTES
 app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/hackathons", hackathonRoutes);
 

@@ -1,24 +1,25 @@
 .teams-page {
     padding: 2rem;
-    min-height: 100%;
-    background-color: var(--background-default);
+    background-color: var(--bg-color);
+    min-height: 100vh;
     color: var(--text-primary);
   }
   
   .teams-header {
     margin-bottom: 2rem;
+    text-align: center;
   }
   
   .teams-header h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
     margin-bottom: 0.5rem;
   }
   
   .teams-header p {
-    color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 1.1rem;
+    color: #a0a0a0;
   }
   
   .teams-controls {
@@ -31,58 +32,49 @@
   .search-filter {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
+    margin-bottom: 2rem;
   }
   
-  .search-input {
-    min-width: 240px;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    background-color: var(--background-paper);
-    color: var(--text-primary);
-    font-size: 0.875rem;
-  }
-  
-  .search-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-color-light);
-  }
-  
+  .search-input,
   .filter-select,
   .sort-select {
-    padding: 0.75rem 2rem 0.75rem 1rem;
-    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    border: 1px solid #333;
     border-radius: 0.5rem;
-    background-color: var(--background-paper);
-    color: var(--text-primary);
-    font-size: 0.875rem;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-size: 0.9rem;
+  }
+  
+  .search-input::placeholder {
+    color: #666;
+  }
+  
+  .search-input:focus,
+  .filter-select:focus,
+  .sort-select:focus {
+    outline: none;
+    border-color: #ff3ebf;
+    box-shadow: 0 0 0 2px rgba(255, 62, 191, 0.2);
   }
   
   .teams-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
   }
   
   .team-card {
-    background-color: var(--background-paper);
+    background-color: #1a1a1a;
     border-radius: 1rem;
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid var(--border-color);
+    border: 1px solid #333;
   }
   
   .team-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   
   .team-card.create-team {
@@ -91,13 +83,13 @@
     justify-content: center;
     min-height: 300px;
     cursor: pointer;
-    background-color: var(--background-paper);
-    border: 2px dashed var(--border-color);
+    background-color: #1a1a1a;
+    border: 2px dashed #333;
   }
   
   .team-card.create-team:hover {
-    border-color: var(--primary-color);
-    background-color: var(--background-hover);
+    border-color: #ff3ebf;
+    background-color: #222;
   }
   
   .team-card-content {
@@ -107,7 +99,7 @@
   
   .plus-icon {
     font-size: 2.5rem;
-    color: var(--primary-color);
+    color: #ff3ebf;
     margin-bottom: 1rem;
   }
   
@@ -125,12 +117,12 @@
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: var(--text-primary);
+    color: #ffffff;
   }
   
   .team-info p {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: #a0a0a0;
     margin-bottom: 1rem;
   }
   
@@ -143,8 +135,8 @@
   
   .skill-tag {
     padding: 0.25rem 0.75rem;
-    background-color: var(--background-hover);
-    color: var(--text-secondary);
+    background-color: #333;
+    color: #ffffff;
     border-radius: 1rem;
     font-size: 0.75rem;
   }
@@ -155,7 +147,7 @@
     align-items: center;
     margin-bottom: 1rem;
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: #a0a0a0;
   }
   
   .status-active {
@@ -173,7 +165,7 @@
   .join-button {
     width: 100%;
     padding: 0.75rem;
-    background-color: var(--primary-color);
+    background-color: #ff3ebf;
     color: white;
     border: none;
     border-radius: 0.5rem;
@@ -183,7 +175,7 @@
   }
   
   .join-button:hover {
-    background-color: var(--primary-color-dark);
+    background-color: #ff2ba8;
   }
   
   .modal-overlay {
@@ -192,7 +184,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -200,12 +192,12 @@
   }
   
   .create-team-modal {
-    background-color: var(--background-paper);
+    background-color: #1a1a1a;
     border-radius: 1rem;
     padding: 2rem;
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   }
   
   .modal-header {
@@ -218,16 +210,20 @@
   .modal-header h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #ffffff;
   }
   
   .close-button {
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: var(--text-secondary);
+    color: #a0a0a0;
     cursor: pointer;
     padding: 0.5rem;
+  }
+  
+  .close-button:hover {
+    color: #ffffff;
   }
   
   .form-group {

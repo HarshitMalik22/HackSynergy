@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/TeamsPage.css';
 import axios from "axios";
+import CreateTeamForm from '../Components/CreateTeamForm';
+
 const TeamsPage = () => {
   const [showCreateTeam, setShowCreateTeam] = useState(false);
   const [teamName, setTeamName] = useState('');
@@ -9,7 +11,7 @@ const TeamsPage = () => {
   const [sortBy, setSortBy] = useState('recent');
   const [filterBy, setFilterBy] = useState('all');
 
- 
+  /*
   const [teams, setTeams] = useState([
     {
       id: 1,
@@ -43,9 +45,8 @@ const TeamsPage = () => {
     }
   ]);
 
+  */
  
- 
-  /*
   const [teams,setTeams] = useState([]);
 
   useEffect(()=>{
@@ -53,7 +54,7 @@ const TeamsPage = () => {
     try{
 
       const response = axios.get("http://localhost:8080/api/teams/get-teams", {headers:
-        {Authorization: `Bearer ${localStorage.getItem("token")}`}
+        {Authorization:` Bearer ${localStorage.getItem("token")}`}
       });
 
       if(response.status===201){
@@ -66,8 +67,6 @@ const TeamsPage = () => {
       return;
     }
   },[])
-
-  */
   const handleCreateTeam = (e) => {
     e.preventDefault();
     const newTeam = {
@@ -206,33 +205,22 @@ const TeamsPage = () => {
               <h2>Create a new team</h2>
               <button className="close-button" onClick={() => setShowCreateTeam(false)}>×</button>
             </div>
-
-            <form onSubmit={handleCreateTeam}>
-              <div className="form-group">
-                <label htmlFor="teamName">Team name</label>
-                <input
-                  type="text"
-                  id="teamName"
-                  value={teamName}
-                  onChange={(e) => setTeamName(e.target.value)}
-                  placeholder="Enter team name"
-                  required
-                />
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() => setShowCreateTeam(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="create-button">
-                  Create team
-                </button>
-              </div>
-            </form>
+            <CreateTeamForm
+              onSubmit={(formData) => {
+                const newTeam = {
+                  id: teams.length + 1,
+                  name: formData.name,
+                  description: formData.description,
+                  members: formData.members.length,
+                  status: 'active',
+                  image: `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.name)}&size=200`,
+                  skills: formData.techStack,
+                  lastActive: new Date()
+                };
+                setTeams([...teams, newTeam]);
+                setShowCreateTeam(false);
+              }}
+            />
           </motion.div>
         </motion.div>
       )}
@@ -240,4 +228,4 @@ const TeamsPage = () => {
   );
 };
 
-export default TeamsPage; 
+export default TeamsPage;
