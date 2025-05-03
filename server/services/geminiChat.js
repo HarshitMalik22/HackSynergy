@@ -8,7 +8,6 @@ dotenv.config();
 
 // Get API key from environment variables
 const API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 console.log('Gemini API Key status:', API_KEY ? 'Found' : 'Missing');
 
 // Basic conversation storage per session
@@ -38,54 +37,70 @@ export const sendMessageToGemini = async (message, sessionId = 'default') => {
       console.log('No API key found - using development fallback response');
       return getDevFallbackResponse(message);
     }
-
-    // Get conversation history for context
-    const conversationHistory = conversations[sessionId] || [];
-    const historyText = conversationHistory
-      .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.text}`)
-      .join('\n');
-
-    // Prepare the API request
-    const url = `${GEMINI_API_URL}?key=${API_KEY}`;
-    const payload = {
-      contents: [{
-        parts: [{
-          text: `Context: You are a helpful assistant for HackSynergy, a platform for hackathons and team collaboration.
-Previous conversation:
-${historyText}
-
-Current message: ${message}
-
-Please provide a helpful response focusing on hackathons, team collaboration, and project management.`
-        }]
-      }]
-    };
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+    
+    // Try multiple model endpoints to ensure compatibility
+    const endpoints = [
+      // Most recent model format
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+      // Alternate model format
+      'https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent',
+      // Legacy model format
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent'
+    ];
+    
+    // Try each endpoint until one works
+    for (const endpoint of endpoints) {
+      try {
+        console.log(`Trying Gemini API endpoint: ${endpoint}`);
+        
+        const url = `${endpoint}?key=${API_KEY}`;
+        
+        // Request body based on current model formats
+        const requestBody = {
+          contents: [{
+            parts: [{ text: message }]
+          }]
+        };
+        
+        // Make the request
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody)
+        });
+        
+        // If successful, process the response
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Successful response from Gemini API');
+          
+          // Extract text from response
+          const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          
+          if (aiText) {
+            // Store in conversation history
+            addToConversationHistory(sessionId, message, aiText);
+            return aiText;
+          }
+        } else {
+          console.log(`Endpoint ${endpoint} returned status ${response.status}`);
+        }
+      } catch (endpointError) {
+        console.log(`Error with endpoint ${endpoint}:`, endpointError.message);
+        // Continue to next endpoint
+      }
     }
-
-    const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!reply) {
-      console.error('Invalid response from Gemini:', data);
-      throw new Error('Failed to get valid response from Gemini');
-    }
-
-    // Add to conversation history
-    addToConversationHistory(sessionId, message, reply);
-
-    return reply;
+    
+    // If all endpoints fail, fall back to development mode
+    console.log('All Gemini API endpoints failed - using development fallback');
+    const fallbackResponse = getDevFallbackResponse(message);
+    addToConversationHistory(sessionId, message, fallbackResponse);
+    return fallbackResponse;
+    
   } catch (error) {
-    console.error('Error in sendMessageToGemini:', error);
-    return getDevFallbackResponse(message);
+    // Handle all errors gracefully
+    console.error('Error in Gemini chat service:', error);
+    return "I'm currently experiencing technical difficulties. The team is working on resolving this. Please try again later.";
   }
 };
 
@@ -129,7 +144,7 @@ function getDevFallbackResponse(message) {
   }
   
   if (lowerMessage.includes('help') || lowerMessage.includes('how')) {
-    return "I can help you with hackathon-related questions, team management, and project organization. What would you like to know?";
+    return "I can help you navigate HackSynergy. You can find hackathons, create or join teams, manage your profile, and track your progress.";
   }
   
   // Return a random fallback response for other queries
