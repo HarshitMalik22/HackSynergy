@@ -189,7 +189,7 @@ export default function HomePage() {
             transition={{ duration: 1.2 }}
           >
             Find teammates, manage projects, and build your network with <span className="font-semibold" style={{ color: SQUID_PINK }}>HackSynergy</span>.<br />
-            <span style={{ color: SQUID_GREEN }}>Inspired by Squid Game.</span>
+
           </motion.p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.a
