@@ -7,6 +7,7 @@ node_modules/
 
 # Sensitive config files
 server/db/config.js
+server/db/config.example.js
 
 # Logs
 logs
