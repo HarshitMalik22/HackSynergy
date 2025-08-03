@@ -11,7 +11,7 @@ dotenv.config({ path: join(__dirname, '..', '.env') });
 
 export const config = {
   port: 8080,
-  mongodbUri: 'mongodb://localhost:27017/hacksynergy',
+  mongodbUri: 'mongodb+srv://harshitmalik29:harshit@hacksynergy.wgf4wjw.mongodb.net/hacksynergy?retryWrites=true&w=majority',
   nodeEnv: 'development',
   geminiApiKey: process.env.GEMINI_API_KEY
 };
