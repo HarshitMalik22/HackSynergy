@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { userAPI } from '../services/api';
 
 // Squid Game Colors
 const SQUID_PINK = '#FF357A';
@@ -8,67 +10,28 @@ const SQUID_GREEN = '#00FFB0';
 const SQUID_BLACK = '#18181B';
 const SQUID_WHITE = '#fff';
 
-// Mock user data
+// Initial empty state for user data
 const initialUserData = {
-  name: 'John Doe',
-  role: 'Full Stack Developer',
-  bio: 'Experienced full stack developer with over 5 years of practice. Specialized in web development and cloud architecture.',
-  github: 'https://github.com/johndoe',
-  linkedin: 'https://linkedin.com/in/johndoe',
+  name: '',
+  role: 'Developer',
+  bio: 'No bio available',
+  github: '#',
+  linkedin: '#',
   contact: {
-    phone: '+1 (555) 123-4567',
-    email: 'john.doe@example.com',
-    location: 'New York, NY',
-    languages: ['English', 'Spanish']
+    phone: 'Not provided',
+    email: '',
+    location: 'Not specified',
+    languages: []
   },
   skills: {
-    technical: ['React', 'Node.js', 'Python', 'MongoDB', 'AWS', 'Docker', 'TypeScript', 'GraphQL'],
-    soft: ['Team Leadership', 'Project Management', 'Communication', 'Problem Solving'],
-    tools: ['VS Code', 'Git', 'Jira', 'Figma', 'Postman']
+    technical: [],
+    soft: [],
+    tools: []
   },
-  domain: [
-    { name: 'Web Development', icon: '💻' },
-    { name: 'Cloud Architecture', icon: '☁️' },
-    { name: 'DevOps', icon: '🔄' }
-  ],
-  experience: [
-    {
-      company: 'Tech Solutions Inc.',
-      role: 'Senior Developer',
-      period: '2020 - Present',
-      description: 'Leading development of enterprise applications.'
-    },
-    {
-      company: 'Digital Innovations Co.',
-      role: 'Full Stack Developer',
-      period: '2018 - 2020',
-      description: 'Developed and maintained multiple web applications.'
-    }
-  ],
-  education: [
-    {
-      school: 'University of Technology',
-      degree: 'M.S. Computer Science',
-      year: '2018'
-    },
-    {
-      school: 'Tech Institute',
-      degree: 'B.S. Software Engineering',
-      year: '2016'
-    }
-  ],
-  reviews: [
-    {
-      author: 'Jane Smith',
-      rating: 5,
-      text: 'Excellent developer, delivered the project on time.'
-    },
-    {
-      author: 'Mike Johnson',
-      rating: 5,
-      text: 'Great communication and technical skills.'
-    }
-  ]
+  domain: [],
+  experience: [],
+  education: [],
+  reviews: []
 };
 
 const TabButton = ({ active, children, onClick }) => (
@@ -200,18 +163,68 @@ const SkillSection = ({ title, skills, onAdd, onRemove }) => {
 };
 
 export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState('OVERVIEW');
-  const [userData, setUserData] = useState({
-    ...initialUserData,
-    skills: {
-      technical_skills: initialUserData.skills.technical || [],
-      soft_skills: initialUserData.skills.soft || [],
-      tools: initialUserData.skills.tools || []
-    }
-  });
-  const [isEditingContact, setIsEditingContact] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [userData, setUserData] = useState(initialUserData);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await userAPI.getProfile();
+        setUserData(prevData => ({
+          ...prevData,
+          name: response.data.name || '',
+          contact: {
+            ...prevData.contact,
+            email: response.data.email || '',
+            phone: response.data.phoneNo || 'Not provided',
+            languages: response.data.languages || []
+          },
+          skills: {
+            ...prevData.skills,
+            technical_skills: response.data.technicalSkills || [],
+            tools: response.data.tools || []
+          },
+          domain: response.data.domain || [],
+          github: response.data.githubLink || '#',
+          linkedin: response.data.linkedinLink || '#',
+          about: response.data.about || 'No bio available'
+        }));
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+        setError('Failed to load profile data');
+        toast.error('Failed to load profile');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   const handleAddSkill = (category, skill) => {
+    // This is a placeholder function since we're not implementing the API for adding skills yet
+    // In a real app, you would make an API call to update the user's skills
+    console.log(`Adding ${skill} to ${category}`);
     if (!userData.skills[category].includes(skill)) {
       setUserData(prev => ({
         ...prev,
@@ -224,6 +237,9 @@ export default function ProfilePage() {
   };
 
   const handleRemoveSkill = (category, skillToRemove) => {
+    // This is a placeholder function since we're not implementing the API for removing skills yet
+    // In a real app, you would make an API call to update the user's skills
+    console.log(`Removing ${skillToRemove} from ${category}`);
     setUserData(prev => ({
       ...prev,
       skills: {
@@ -234,6 +250,7 @@ export default function ProfilePage() {
   };
 
   const handleContactEdit = (field, value) => {
+    console.log(`Updating ${field} to ${value}`);
     setUserData(prev => ({
       ...prev,
       contact: {

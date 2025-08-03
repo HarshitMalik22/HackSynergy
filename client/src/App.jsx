@@ -34,6 +34,7 @@ function App() {
 
           {/* Protected routes - wrapped with DashboardLayout */}
           <Route path="/" element={<HomePage/>}/>
+          <Route path="/home" element={<HomePage/>}/>
           <Route path="/teams" element={<AuthenticatedRoute><TeamPage /></AuthenticatedRoute>} />
           <Route path="/project-board" element={<AuthenticatedRoute><ProjectBoard /></AuthenticatedRoute>} />
           <Route path="/find-teammates" element={<AuthenticatedRoute><TeammateMatching /></AuthenticatedRoute>} />

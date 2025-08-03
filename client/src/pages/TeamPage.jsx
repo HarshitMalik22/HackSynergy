@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import '../styles/TeamsPage.css';
-import axios from "axios";
 import CreateTeamForm from '../Components/CreateTeamForm';
+import { teamAPI } from '../services/api';
 
 const TeamsPage = () => {
   const [showCreateTeam, setShowCreateTeam] = useState(false);
@@ -47,56 +48,74 @@ const TeamsPage = () => {
 
   */
  
-  const [teams,setTeams] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(()=>{
-    
-    try{
-
-      const response = axios.get("http://localhost:8080/api/teams/get-teams", {headers:
-        {Authorization:` Bearer ${localStorage.getItem("token")}`}
-      });
-
-      if(response.status===201){
-        setTeams(response.data.data);
-      }
-
-      
-    }catch(err){
-      console.error(err);
-      return;
+  const fetchTeams = async () => {
+    try {
+      setIsLoading(true);
+      const response = await teamAPI.getTeams();
+      setTeams(response.data.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching teams:', err);
+      setError('Failed to load teams. Please try again later.');
+      toast.error('Failed to load teams');
+    } finally {
+      setIsLoading(false);
     }
-  },[])
-  const handleCreateTeam = (e) => {
-    e.preventDefault();
-    const newTeam = {
-      id: teams.length + 1,
-      name: teamName,
-      description: 'New team description',
-      members: 1,
-      status: 'active',
-      image: `https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&size=200`,
-      skills: [],
-      lastActive: new Date()
-    };
-    setTeams([...teams, newTeam]);
-    setShowCreateTeam(false);
-    setTeamName('');
   };
 
-  const handleJoinTeam = (teamId) => {
-    // Implement join team logic
-    console.log('Joining team:', teamId);
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
+  const handleCreateTeam = async (teamData) => {
+    try {
+      setIsLoading(true);
+      const response = await teamAPI.createTeam({
+        teamName: teamData.name,
+        description: teamData.description,
+        techStack: teamData.techStack,
+        member1: teamData.members[0],
+        member2: teamData.members[1] || ''
+      });
+      
+      toast.success('Team created successfully!');
+      setShowCreateTeam(false);
+      fetchTeams(); // Refresh the teams list
+    } catch (err) {
+      console.error('Error creating team:', err);
+      toast.error(err.response?.data?.message || 'Failed to create team');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const filteredAndSortedTeams = teams
+  const handleJoinTeam = async (teamId) => {
+    try {
+      setIsLoading(true);
+      await teamAPI.joinTeam(teamId);
+      toast.success('Successfully joined the team!');
+      fetchTeams(); // Refresh the teams list
+    } catch (err) {
+      console.error('Error joining team:', err);
+      toast.error(err.response?.data?.message || 'Failed to join team');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredAndSortedTeams = (teams || [])
     .filter(team => {
+      if (!team) return false;
       if (filterBy === 'all') return true;
       return team.status === filterBy;
     })
     .filter(team => 
-      team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      team.description.toLowerCase().includes(searchQuery.toLowerCase())
+      team.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      team.description?.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       switch (sortBy) {
