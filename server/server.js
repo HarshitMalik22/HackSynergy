@@ -27,10 +27,38 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ROUTES
+// Debug: Log all registered routes
+const printRoutes = (routes, prefix = '') => {
+  routes.forEach(route => {
+    if (route.route) {
+      // Routes registered directly on app
+      const methods = Object.keys(route.route.methods).join(',').toUpperCase();
+      console.log(`${methods.padEnd(6)} ${prefix}${route.route.path}`);
+    } else if (route.name === 'router') {
+      // Nested routes (router instances)
+      route.handle.stack.forEach(handler => {
+        if (handler.route) {
+          const methods = Object.keys(handler.route.methods).join(',').toUpperCase();
+          console.log(`${methods.padEnd(6)} ${prefix}${handler.route.path}`);
+        } else if (handler.name === 'router') {
+          // Handle nested routers if needed
+          printRoutes(handler.handle.stack, `${prefix}${route.path}/`);
+        }
+      });
+    }
+  });
+};
+
+// Register routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/hackathons", hackathonRoutes);
+
+// Log all registered routes
+console.log('\n=== Registered Routes ===');
+printRoutes(app._router.stack);
+console.log('========================\n');
 
 // Home route with arcjet middleware
 app.get("/", arcjetMiddleware, (req, res) => {

@@ -33,12 +33,23 @@ const LoginPage = () => {
         {
           email: formData.email,
           password: formData.password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       );
       
+      console.log('Login Response:', response.data);
+      
       if (response.data.success) {
         const token = response.data.token;
+        if (!token) {
+          throw new Error('No token received from server');
+        }
         localStorage.setItem("token", token);
+        console.log('Token saved to localStorage');
         navigate("/home");
       } else {
         setError(response.data.message || "Login failed");

@@ -13,13 +13,65 @@ const api = axios.create({
 // Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
+    // Skip token check for auth endpoints
+    if (config.url.includes('/auth/')) {
+      return config;
+    }
+    
     const token = localStorage.getItem('token');
+    console.log('API Request:', {
+      url: config.url,
+      method: config.method,
+      hasToken: !!token,
+      headers: config.headers
+    });
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('Authorization header set with token');
+    } else {
+      console.warn('No authentication token found in localStorage');
+      // Optionally redirect to login if needed
+      // window.location.href = '/login';
     }
     return config;
   },
   (error) => {
+    console.error('Request Interceptor Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => {
+    console.log('API Response:', {
+      url: response.config.url,
+      status: response.status,
+      data: response.data
+    });
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      console.error('API Error Response:', {
+        url: error.config.url,
+        status: error.response.status,
+        data: error.response.data,
+        headers: error.response.headers
+      });
+      
+      // Handle 401 Unauthorized
+      if (error.response.status === 401) {
+        console.error('Authentication error - redirecting to login');
+        // You might want to redirect to login page here
+        window.location.href = '/login';
+      }
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Error setting up request:', error.message);
+    }
     return Promise.reject(error);
   }
 );
@@ -33,7 +85,7 @@ export const authAPI = {
 
 // User API
 export const userAPI = {
-  getProfile: () => api.get('/users/profile'),
+  getProfile: () => api.get('/users/getUser'),
   updateProfile: (userData) => api.put('/users/profile', userData),
 };
 

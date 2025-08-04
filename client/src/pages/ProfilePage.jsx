@@ -172,25 +172,36 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       try {
         setIsLoading(true);
+        console.log('Fetching profile data...');
         const response = await userAPI.getProfile();
+        console.log('Profile API Response:', response);
+        
+        // The backend returns the user data directly in response.data
+        const userData = response.data;
+        console.log('User Data:', userData);
+        
+        if (!userData) {
+          throw new Error('No user data received');
+        }
+        
         setUserData(prevData => ({
           ...prevData,
-          name: response.data.name || '',
+          name: userData.name || '',
           contact: {
             ...prevData.contact,
-            email: response.data.email || '',
-            phone: response.data.phoneNo || 'Not provided',
-            languages: response.data.languages || []
+            email: userData.email || '',
+            phone: userData.phoneNo || 'Not provided',
+            languages: userData.languages || []
           },
           skills: {
             ...prevData.skills,
-            technical_skills: response.data.technicalSkills || [],
-            tools: response.data.tools || []
+            technical: userData.technicalSkills || [],
+            tools: userData.tools || []
           },
-          domain: response.data.domain || [],
-          github: response.data.githubLink || '#',
-          linkedin: response.data.linkedinLink || '#',
-          about: response.data.about || 'No bio available'
+          domain: userData.domain || [],
+          github: userData.githubLink || '#',
+          linkedin: userData.linkedinLink || '#',
+          about: userData.about || 'No bio available'
         }));
         setError(null);
       } catch (err) {
